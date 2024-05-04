@@ -16,9 +16,8 @@ const Navbar = () => {
                     href="/"
                     fontWeight={600}
                 >
-                    P
                     <Box component="span" color="primary.main">
-                        H
+                        OVUM
                     </Box>{" "}
                     Health Care
                 </Typography>

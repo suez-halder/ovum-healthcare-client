@@ -61,9 +61,8 @@ const Footer = () => {
                         fontWeight={600}
                         color="white"
                     >
-                        P
                         <Box component="span" color="primary.main">
-                            H
+                            OVUM
                         </Box>{" "}
                         Health Care
                     </Typography>

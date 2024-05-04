@@ -2,11 +2,14 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
 const Specialist = async () => {
-    const res = await fetch(`${process.env.NEXT_APP_BACKEND_URL}/specialties`, {
-        next: {
-            revalidate: 30,
-        },
-    });
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/specialties`,
+        {
+            next: {
+                revalidate: 30,
+            },
+        }
+    );
     const { data: specialties } = await res.json();
     // console.log(specialties);
     return (

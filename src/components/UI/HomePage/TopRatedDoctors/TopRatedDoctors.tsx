@@ -14,7 +14,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const TopRatedDoctors = async () => {
     const res = await fetch(
-        `${process.env.NEXT_APP_BACKEND_URL}/doctor?page=1&limit=3`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/doctor?page=1&limit=3`
     );
     const { data: doctors } = await res.json();
     console.log(doctors);

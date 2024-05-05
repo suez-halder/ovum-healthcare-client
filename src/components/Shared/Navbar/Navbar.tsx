@@ -1,7 +1,13 @@
+"use client";
+
+import { getUserInfo, isLoggedIn } from "@/services/auth.services";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
 const Navbar = () => {
+    const userInfo = getUserInfo();
+    console.log(userInfo);
+
     return (
         <Container>
             <Stack
@@ -29,9 +35,13 @@ const Navbar = () => {
                     <Typography>Diagnostics</Typography>
                     <Typography>NGOs</Typography>
                 </Stack>
-                <Button component={Link} href="/login">
-                    Login
-                </Button>
+                {userInfo?.email ? (
+                    <Button color="error">Logout</Button>
+                ) : (
+                    <Button component={Link} href="/login">
+                        Login
+                    </Button>
+                )}
             </Stack>
         </Container>
     );

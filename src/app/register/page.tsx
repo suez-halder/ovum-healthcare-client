@@ -12,13 +12,15 @@ import {
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { registerPatient } from "@/services/actions/registerPatient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.services";
+import OvumForm from "@/components/Forms/OvumForm";
+import OvumInput from "@/components/Forms/OvumInput";
 
 interface IPatientData {
     name: string;
@@ -35,16 +37,7 @@ interface IPatientRegisterFormData {
 const RegisterPage = () => {
     const router = useRouter();
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<IPatientRegisterFormData>();
-
-    const onSubmit: SubmitHandler<IPatientRegisterFormData> = async (
-        values
-    ) => {
+    const handleRegister = async (values: FieldValues) => {
         const data = modifyPayload(values);
         try {
             const res = await registerPatient(data);
@@ -106,55 +99,55 @@ const RegisterPage = () => {
                         </Box>
                     </Stack>
                     <Box>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <OvumForm onSubmit={handleRegister}>
                             <Grid container spacing={2} my={1}>
                                 <Grid item md={12}>
-                                    <TextField
+                                    <OvumInput
+                                        name="patient.name"
                                         label="Name"
-                                        variant="outlined"
                                         size="small"
                                         fullWidth={true}
-                                        {...register("patient.name")}
+                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="patient.email"
                                         label="Email"
                                         type="email"
-                                        variant="outlined"
                                         size="small"
                                         fullWidth={true}
-                                        {...register("patient.email")}
+                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="password"
                                         label="Password"
                                         type="password"
-                                        variant="outlined"
                                         size="small"
                                         fullWidth={true}
-                                        {...register("password")}
+                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="patient.contactNumber"
                                         label="Contact Number"
-                                        type="tej"
-                                        variant="outlined"
+                                        type="tel"
                                         size="small"
                                         fullWidth={true}
-                                        {...register("patient.contactNumber")}
+                                        required={false}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="patient.address"
                                         label="Address"
                                         type="text"
-                                        variant="outlined"
                                         size="small"
                                         fullWidth={true}
-                                        {...register("patient.address")}
+                                        required={false}
                                     />
                                 </Grid>
                             </Grid>
@@ -173,7 +166,7 @@ const RegisterPage = () => {
                                     <Link href="/login">Login</Link>
                                 </Box>
                             </Typography>
-                        </form>
+                        </OvumForm>
                     </Box>
                 </Box>
             </Stack>

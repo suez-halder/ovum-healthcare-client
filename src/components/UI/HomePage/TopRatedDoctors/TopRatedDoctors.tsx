@@ -17,7 +17,7 @@ const TopRatedDoctors = async () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/doctor?page=1&limit=3`
     );
     const { data: doctors } = await res.json();
-    console.log(doctors);
+    // console.log(doctors);
 
     return (
         <Box

@@ -12,28 +12,18 @@ import {
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { userLogin } from "@/services/actions/userLogin";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/services/auth.services";
-
-export type TFormValues = {
-    email: string;
-    password: string;
-};
+import OvumForm from "@/components/Forms/OvumForm";
+import OvumInput from "@/components/Forms/OvumInput";
 
 const LoginPage = () => {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<TFormValues>();
-
     const router = useRouter();
 
-    const onSubmit: SubmitHandler<TFormValues> = async (values) => {
+    const handleLogin = async (values: FieldValues) => {
         // console.log(values);
         try {
             const res = await userLogin(values);
@@ -87,26 +77,22 @@ const LoginPage = () => {
                         </Box>
                     </Stack>
                     <Box>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <OvumForm onSubmit={handleLogin}>
                             <Grid container spacing={2} my={1}>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="email"
                                         label="Email"
                                         type="email"
-                                        variant="outlined"
-                                        size="small"
                                         fullWidth={true}
-                                        {...register("email")}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
-                                    <TextField
+                                    <OvumInput
+                                        name="password"
                                         label="Password"
                                         type="password"
-                                        variant="outlined"
-                                        size="small"
                                         fullWidth={true}
-                                        {...register("password")}
                                     />
                                 </Grid>
                             </Grid>
@@ -133,7 +119,7 @@ const LoginPage = () => {
                                     <Link href="/register">Register</Link>
                                 </Box>
                             </Typography>
-                        </form>
+                        </OvumForm>
                     </Box>
                 </Box>
             </Stack>

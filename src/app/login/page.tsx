@@ -21,6 +21,7 @@ import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 export const validationSchema = z.object({
     email: z.string().email("Please enter a valid email address!"),
@@ -29,6 +30,7 @@ export const validationSchema = z.object({
 
 const LoginPage = () => {
     const router = useRouter();
+    const [error, setError] = useState("");
 
     const handleLogin = async (values: FieldValues) => {
         // console.log(values);
@@ -38,10 +40,11 @@ const LoginPage = () => {
                 toast.success(res?.message);
                 storeUserInfo({ accessToken: res?.data?.accessToken });
                 router.push("/");
+            } else {
+                setError(res?.message);
             }
         } catch (err: any) {
-            console.log(err);
-            toast.error(err.message);
+            console.log(err.message);
         }
     };
 
@@ -84,6 +87,23 @@ const LoginPage = () => {
                             </Typography>
                         </Box>
                     </Stack>
+
+                    {error && (
+                        <Box>
+                            <Typography
+                                color="white"
+                                sx={{
+                                    backgroundColor: "red",
+                                    padding: "5px",
+                                    borderRadius: "5px",
+                                    marginTop: "5px",
+                                }}
+                            >
+                                {error}
+                            </Typography>
+                        </Box>
+                    )}
+
                     <Box>
                         <OvumForm
                             onSubmit={handleLogin}

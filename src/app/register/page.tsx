@@ -23,6 +23,7 @@ import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 export const patientValidationSchema = z.object({
     name: z.string().min(1, "Please enter your name"),
@@ -50,6 +51,7 @@ export const defaultValues = {
 
 const RegisterPage = () => {
     const router = useRouter();
+    const [error, setError] = useState("");
 
     const handleRegister = async (values: FieldValues) => {
         const data = modifyPayload(values);
@@ -67,6 +69,8 @@ const RegisterPage = () => {
                     });
                     router.push("/");
                 }
+            } else {
+                setError(res?.message);
             }
         } catch (err: any) {
             toast.error(err.message);
@@ -112,6 +116,21 @@ const RegisterPage = () => {
                             </Typography>
                         </Box>
                     </Stack>
+                    {error && (
+                        <Box>
+                            <Typography
+                                color="white"
+                                sx={{
+                                    backgroundColor: "red",
+                                    padding: "5px",
+                                    borderRadius: "5px",
+                                    marginTop: "5px",
+                                }}
+                            >
+                                {error}
+                            </Typography>
+                        </Box>
+                    )}
                     <Box>
                         <OvumForm
                             onSubmit={handleRegister}

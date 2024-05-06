@@ -19,6 +19,13 @@ import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/services/auth.services";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+export const validationSchema = z.object({
+    email: z.string().email("Please enter a valid email address!"),
+    password: z.string().min(6, "Must be at least 6 characters"),
+});
 
 const LoginPage = () => {
     const router = useRouter();
@@ -33,7 +40,8 @@ const LoginPage = () => {
                 router.push("/");
             }
         } catch (err: any) {
-            console.log(err.message);
+            console.log(err);
+            toast.error(err.message);
         }
     };
 
@@ -77,7 +85,14 @@ const LoginPage = () => {
                         </Box>
                     </Stack>
                     <Box>
-                        <OvumForm onSubmit={handleLogin}>
+                        <OvumForm
+                            onSubmit={handleLogin}
+                            resolver={zodResolver(validationSchema)}
+                            defaultValues={{
+                                email: "suez10@gmail.com",
+                                password: "123456",
+                            }}
+                        >
                             <Grid container spacing={2} my={1}>
                                 <Grid item md={6}>
                                     <OvumInput
@@ -85,7 +100,6 @@ const LoginPage = () => {
                                         label="Email"
                                         type="email"
                                         fullWidth={true}
-                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
@@ -94,7 +108,6 @@ const LoginPage = () => {
                                         label="Password"
                                         type="password"
                                         fullWidth={true}
-                                        required={true}
                                     />
                                 </Grid>
                             </Grid>

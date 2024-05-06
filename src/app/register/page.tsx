@@ -21,18 +21,32 @@ import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.services";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface IPatientData {
-    name: string;
-    email: string;
-    contactNumber: string;
-    address: string;
-}
+export const patientValidationSchema = z.object({
+    name: z.string().min(1, "Please enter your name"),
+    email: z.string().email("Please enter a valid email address"),
+    contactNumber: z
+        .string()
+        .regex(/^\d{11}$/, "Please provide a valid phone number"),
+    address: z.string().min(1, "Please enter your address"),
+});
 
-interface IPatientRegisterFormData {
-    password: string;
-    patient: IPatientData;
-}
+export const validationSchema = z.object({
+    password: z.string().min(6, "Must be at least 6 characters"),
+    patient: patientValidationSchema,
+});
+
+export const defaultValues = {
+    password: "",
+    patient: {
+        name: "",
+        email: "",
+        contactNumber: "",
+        address: "",
+    },
+};
 
 const RegisterPage = () => {
     const router = useRouter();
@@ -99,7 +113,11 @@ const RegisterPage = () => {
                         </Box>
                     </Stack>
                     <Box>
-                        <OvumForm onSubmit={handleRegister}>
+                        <OvumForm
+                            onSubmit={handleRegister}
+                            resolver={zodResolver(validationSchema)}
+                            defaultValues={defaultValues}
+                        >
                             <Grid container spacing={2} my={1}>
                                 <Grid item md={12}>
                                     <OvumInput
@@ -107,7 +125,6 @@ const RegisterPage = () => {
                                         label="Name"
                                         size="small"
                                         fullWidth={true}
-                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
@@ -117,7 +134,6 @@ const RegisterPage = () => {
                                         type="email"
                                         size="small"
                                         fullWidth={true}
-                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
@@ -127,7 +143,6 @@ const RegisterPage = () => {
                                         type="password"
                                         size="small"
                                         fullWidth={true}
-                                        required={true}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
@@ -137,7 +152,6 @@ const RegisterPage = () => {
                                         type="tel"
                                         size="small"
                                         fullWidth={true}
-                                        required={false}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
@@ -147,7 +161,6 @@ const RegisterPage = () => {
                                         type="text"
                                         size="small"
                                         fullWidth={true}
-                                        required={false}
                                     />
                                 </Grid>
                             </Grid>

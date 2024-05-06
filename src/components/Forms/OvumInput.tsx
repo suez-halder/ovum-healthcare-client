@@ -9,7 +9,7 @@ type TInputProps = {
     fullWidth?: boolean;
     sx?: SxProps;
     placeholder?: string;
-    required: boolean;
+    required?: boolean;
 };
 
 const OvumInput = ({
@@ -28,7 +28,7 @@ const OvumInput = ({
         <Controller
             control={control}
             name={name}
-            render={({ field }) => (
+            render={({ field, fieldState: { error } }) => (
                 <TextField
                     {...field}
                     sx={{ ...sx }}
@@ -39,6 +39,8 @@ const OvumInput = ({
                     fullWidth={fullWidth}
                     placeholder={label}
                     required={required}
+                    error={!!error?.message}
+                    helperText={error?.message}
                 />
             )}
         />

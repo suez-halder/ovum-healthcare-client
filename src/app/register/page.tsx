@@ -67,7 +67,7 @@ const RegisterPage = () => {
                     storeUserInfo({
                         accessToken: result?.data?.accessToken,
                     });
-                    router.push("/");
+                    router.push("/dashboard");
                 }
             } else {
                 setError(res?.message);

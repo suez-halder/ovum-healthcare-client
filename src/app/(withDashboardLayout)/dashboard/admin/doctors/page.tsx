@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDebounced } from "@/redux/hooks";
 import EditIcon from "@mui/icons-material/Edit";
+import Link from "next/link";
 
 const DoctorsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -61,13 +62,19 @@ const DoctorsPage = () => {
             align: "center",
             renderCell: ({ row }) => {
                 return (
-                    <IconButton
-                        onClick={() => handleDelete(row.id)}
-                        aria-label="delete"
-                    >
-                        <DeleteIcon />
-                        <EditIcon />
-                    </IconButton>
+                    <Box>
+                        <IconButton
+                            onClick={() => handleDelete(row.id)}
+                            aria-label="delete"
+                        >
+                            <DeleteIcon sx={{ color: "red" }} />
+                        </IconButton>
+                        <Link href={`/dashboard/admin/doctors/edit/${row.id}`}>
+                            <IconButton aria-label="update">
+                                <EditIcon sx={{ color: "#1586FD" }} />
+                            </IconButton>
+                        </Link>
+                    </Box>
                 );
             },
         },

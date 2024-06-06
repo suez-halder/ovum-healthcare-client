@@ -48,7 +48,7 @@ instance.interceptors.response.use(
 
         // console.log(error);
         const config = error.config;
-        console.log(config);
+        // console.log(config);
 
         if (error?.response?.status === 500 && !config.sent) {
             config.sent = true; //! to stop request again and again

@@ -2,11 +2,13 @@ import OvumDatePicker from "@/components/Forms/OvumDatePicker";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumTimePicker from "@/components/Forms/OvumTimePicker";
 import OvumModal from "@/components/Shared/OvumModal/OvumModal";
+import { useCreateScheduleMutation } from "@/redux/api/scheduleApi";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { timeFormatter } from "@/utils/timeFormatter";
 import { Button, Grid } from "@mui/material";
 import React from "react";
 import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
 
 type TProps = {
     open: boolean;
@@ -14,6 +16,8 @@ type TProps = {
 };
 
 const SchedulesModal = ({ open, setOpen }: TProps) => {
+    const [createSchedule] = useCreateScheduleMutation();
+
     const handleFormSubmit = async (values: FieldValues) => {
         values.startDate = dateFormatter(values.startDate);
         values.endDate = dateFormatter(values.endDate);
@@ -21,7 +25,12 @@ const SchedulesModal = ({ open, setOpen }: TProps) => {
         values.endTime = timeFormatter(values.endTime);
 
         try {
-            console.log(values);
+            const res = await createSchedule(values).unwrap();
+            if (res?.length) {
+                toast.success("Schedule created successfully!");
+                setOpen(false);
+            }
+            console.log(res);
         } catch (err: any) {
             console.error(err.message);
         }

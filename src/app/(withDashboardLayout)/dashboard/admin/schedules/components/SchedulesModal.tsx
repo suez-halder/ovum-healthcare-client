@@ -2,6 +2,8 @@ import OvumDatePicker from "@/components/Forms/OvumDatePicker";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumTimePicker from "@/components/Forms/OvumTimePicker";
 import OvumModal from "@/components/Shared/OvumModal/OvumModal";
+import { dateFormatter } from "@/utils/dateFormatter";
+import { timeFormatter } from "@/utils/timeFormatter";
 import { Button, Grid } from "@mui/material";
 import React from "react";
 import { FieldValues } from "react-hook-form";
@@ -13,6 +15,11 @@ type TProps = {
 
 const SchedulesModal = ({ open, setOpen }: TProps) => {
     const handleFormSubmit = async (values: FieldValues) => {
+        values.startDate = dateFormatter(values.startDate);
+        values.endDate = dateFormatter(values.endDate);
+        values.startTime = timeFormatter(values.startTime);
+        values.endTime = timeFormatter(values.endTime);
+
         try {
             console.log(values);
         } catch (err: any) {
@@ -23,10 +30,10 @@ const SchedulesModal = ({ open, setOpen }: TProps) => {
         <OvumModal open={open} setOpen={setOpen} title="Create Schedule">
             <OvumForm onSubmit={handleFormSubmit}>
                 <Grid container spacing={2} sx={{ width: "400px" }}>
-                    <Grid item md={6}>
+                    <Grid item md={12}>
                         <OvumDatePicker name="startDate" label="Start Date" />
                     </Grid>
-                    <Grid item md={6}>
+                    <Grid item md={12}>
                         <OvumDatePicker name="endDate" label="End Date" />
                     </Grid>
                     <Grid item md={6}>

@@ -1,13 +1,13 @@
 import { Button, Grid } from "@mui/material";
 import { FieldValues } from "react-hook-form";
-
-import { modifyPayload } from "@/utils/modifyPayload";
-import { toast } from "sonner";
 import OvumFullScreenModal from "@/components/Shared/OvumModal/OvumFullScreenModal";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
 import OvumSelectField from "@/components/Forms/OvumSelectField";
 import { Gender } from "@/types";
+import { useCreateDoctorMutation } from "@/redux/api/doctorApi";
+import { modifyPayload } from "@/utils/modifyPayload";
+import { toast } from "sonner";
 
 type TProps = {
     open: boolean;
@@ -15,8 +15,24 @@ type TProps = {
 };
 
 const DoctorModal = ({ open, setOpen }: TProps) => {
+    const [createDoctor] = useCreateDoctorMutation();
+
     const handleFormSubmit = async (values: FieldValues) => {
-        console.log(values);
+        values.doctor.experience = Number(values.doctor.experience);
+        values.doctor.appointmentFee = Number(values.doctor.appointmentFee);
+
+        const data = modifyPayload(values);
+
+        try {
+            const res = await createDoctor(data).unwrap();
+            console.log(res);
+            if (res?.id) {
+                toast.success("Doctor created successfully!");
+                setOpen(false);
+            }
+        } catch (err: any) {
+            console.error(err);
+        }
     };
 
     const defaultValues = {

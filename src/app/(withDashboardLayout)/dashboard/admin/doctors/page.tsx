@@ -8,19 +8,28 @@ import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import DoctorModal from "./components/DoctorModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Image from "next/image";
 import { toast } from "sonner";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDebounced } from "@/redux/hooks";
 
 const DoctorsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const { data, isLoading } = useGetAllDoctorsQuery({});
-    // console.log(data);
+    const query: Record<string, any> = {};
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    const debouncedTerm = useDebounced({
+        searchQuery: searchTerm,
+        delay: 1000,
+    });
+
+    if (!!debouncedTerm) {
+        query["searchTerm"] = searchTerm;
+    }
+
+    const { data, isLoading } = useGetAllDoctorsQuery({ ...query });
     const doctors = data?.doctors;
     const meta = data?.meta;
-
-    console.log(doctors);
 
     const [deleteDoctor] = useDeleteDoctorMutation();
 
@@ -36,7 +45,12 @@ const DoctorsPage = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: "name", headerName: "Name", width: 400 },
+        { field: "name", headerName: "Name", flex: 1 },
+        { field: "email", headerName: "Email", flex: 1 },
+        { field: "contactNumber", headerName: "Contact No.", flex: 1 },
+        { field: "qualification", headerName: "Qualification", flex: 1 },
+        { field: "gender", headerName: "Gender", flex: 1 },
+        { field: "appointmentFee", headerName: "Appointment Fee", flex: 1 },
 
         {
             field: "action",
@@ -64,7 +78,11 @@ const DoctorsPage = () => {
                     Create New Doctor
                 </Button>
                 <DoctorModal open={isModalOpen} setOpen={setIsModalOpen} />
-                <TextField size="small" placeholder="Search Doctors" />
+                <TextField
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    size="small"
+                    placeholder="Search Doctors"
+                />
             </Stack>
             {!isLoading ? (
                 <Box my={2}>

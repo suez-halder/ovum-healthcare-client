@@ -11,6 +11,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "sonner";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDebounced } from "@/redux/hooks";
+import EditIcon from "@mui/icons-material/Edit";
 
 const DoctorsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -65,6 +66,7 @@ const DoctorsPage = () => {
                         aria-label="delete"
                     >
                         <DeleteIcon />
+                        <EditIcon />
                     </IconButton>
                 );
             },

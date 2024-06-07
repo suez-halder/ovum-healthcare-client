@@ -30,7 +30,7 @@ const SchedulesModal = ({ open, setOpen }: TProps) => {
                 toast.success("Schedule created successfully!");
                 setOpen(false);
             }
-            console.log(res);
+            // console.log(res);
         } catch (err: any) {
             console.error(err.message);
         }

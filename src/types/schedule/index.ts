@@ -1,13 +1,6 @@
-export type ISchedule = {
+export type TSchedule = {
     [x: string]: any;
-    id?: string;
-    startDate: string;
-    endDate: string;
-};
-
-export type IScheduleFrom = {
-    startDate: Date;
-    endDate: Date;
-    startTime: string;
-    endTime: string;
+    id?: string | undefined;
+    startDateTime: string;
+    endDateTime: string;
 };

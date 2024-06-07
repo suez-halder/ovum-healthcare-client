@@ -13,10 +13,29 @@ import { useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorSchedulesApi";
 const DoctorSchedulesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+    const query: Record<string, any> = {};
+
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+
+    query["page"] = page;
+    query["limit"] = limit;
+
     const [allSchedule, setAllSchedule] = useState<any>([]);
-    const { data, isLoading } = useGetAllDoctorSchedulesQuery({});
+    const { data, isLoading } = useGetAllDoctorSchedulesQuery({ ...query });
 
     const schedules = data?.doctorSchedules;
+    const meta = data?.meta;
+
+    let pageCount: number;
+
+    if (meta?.total) {
+        pageCount = Math.ceil(meta.total / limit);
+    }
+
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     useEffect(() => {
         const updateData = schedules?.map(
@@ -24,8 +43,12 @@ const DoctorSchedulesPage = () => {
                 return {
                     id: schedule?.scheduleId,
                     startDate: dateFormatter(schedule?.schedule?.startDateTime),
-                    startTime: dayjs(schedule?.startDate).format("hh:mm a"),
-                    endTime: dayjs(schedule?.endDate).format("hh:mm a"),
+                    startTime: dayjs(schedule?.schedule?.startDateTime).format(
+                        "hh:mm a"
+                    ),
+                    endTime: dayjs(schedule?.schedule?.endDateTime).format(
+                        "hh:mm a"
+                    ),
                 };
             }
         );
@@ -59,7 +82,7 @@ const DoctorSchedulesPage = () => {
                 endIcon={<AddIcon />}
                 sx={{ mt: 3.5 }}
             >
-                Create Doctor Schedule
+                Select Doctor Schedule
             </Button>
             <DoctorScheduleModal open={isModalOpen} setOpen={setIsModalOpen} />
             <Box sx={{ mb: 5 }}></Box>
@@ -71,6 +94,26 @@ const DoctorSchedulesPage = () => {
                             rows={allSchedule ?? []}
                             columns={columns}
                             hideFooterPagination
+                            slots={{
+                                footer: () => {
+                                    return (
+                                        <Box
+                                            sx={{
+                                                mb: 2,
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <Pagination
+                                                color="primary"
+                                                count={pageCount}
+                                                page={page}
+                                                onChange={handleChange}
+                                            />
+                                        </Box>
+                                    );
+                                },
+                            }}
                         />
                     </Box>
                 ) : (

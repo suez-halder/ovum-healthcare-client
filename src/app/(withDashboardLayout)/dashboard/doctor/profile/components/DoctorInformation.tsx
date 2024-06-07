@@ -52,6 +52,12 @@ const DoctorInformation = ({ data }: any) => {
                     </Typography>
                     <Typography>{data?.designation}</Typography>
                 </StyledInformationBox>
+                <StyledInformationBox>
+                    <Typography variant="caption" color="secondary">
+                        Address
+                    </Typography>
+                    <Typography>{data?.address}</Typography>
+                </StyledInformationBox>
             </Stack>
 
             <Typography variant="h5" my={2} color={"primary.main"}>

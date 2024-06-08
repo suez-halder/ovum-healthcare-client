@@ -23,7 +23,13 @@ const AuthButton = () => {
     return (
         <>
             {userInfo?.email ? (
-                <Button onClick={handleLogout} color="error">
+                <Button
+                    onClick={handleLogout}
+                    color="error"
+                    sx={{
+                        boxShadow: 0,
+                    }}
+                >
                     Logout
                 </Button>
             ) : (

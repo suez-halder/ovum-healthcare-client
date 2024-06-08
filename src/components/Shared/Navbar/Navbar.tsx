@@ -30,42 +30,52 @@ const Navbar = () => {
     };
 
     return (
-        <Container>
-            <Stack
-                py={2}
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <Typography
-                    variant="h4"
-                    component={Link}
-                    href="/"
-                    fontWeight={600}
+        <Box
+            sx={{
+                bgcolor: "primary.main",
+            }}
+        >
+            <Container>
+                <Stack
+                    py={2}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
                 >
-                    <Box component="span" color="primary.main">
-                        OVUM
-                    </Box>{" "}
-                    Health Care
-                </Typography>
+                    <Typography
+                        variant="h4"
+                        component={Link}
+                        href="/"
+                        fontWeight={600}
+                    >
+                        <Box component="span" color="#ffff">
+                            OVUM
+                        </Box>{" "}
+                        Health Care
+                    </Typography>
 
-                <Stack direction="row" justifyContent="space-between" gap={4}>
-                    <Typography>Consultation</Typography>
-                    <Typography>Health Plans</Typography>
-                    <Typography>Medicine</Typography>
-                    <Typography>Diagnostics</Typography>
-                    {userInfo?.email ? (
-                        <Typography
-                            component={Link}
-                            href={`/dashboard/${role}`}
-                        >
-                            Dashboard
-                        </Typography>
-                    ) : null}
-                </Stack>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        gap={4}
+                    >
+                        <Typography color="#ffff">Consultation</Typography>
+                        <Typography color="#ffff">Health Plans</Typography>
+                        <Typography color="#ffff">Medicine</Typography>
+                        <Typography color="#ffff">Diagnostics</Typography>
+                        {userInfo?.email ? (
+                            <Typography
+                                color="#ffff"
+                                component={Link}
+                                href={`/dashboard/${role}`}
+                            >
+                                Dashboard
+                            </Typography>
+                        ) : null}
+                    </Stack>
 
-                <AuthButton />
-                {/* {userInfo?.email ? (
+                    <AuthButton />
+                    {/* {userInfo?.email ? (
                     <Button onClick={handleLogout} color="error">
                         Logout
                     </Button>
@@ -74,8 +84,9 @@ const Navbar = () => {
                         Login
                     </Button>
                 )} */}
-            </Stack>
-        </Container>
+                </Stack>
+            </Container>
+        </Box>
     );
 };
 

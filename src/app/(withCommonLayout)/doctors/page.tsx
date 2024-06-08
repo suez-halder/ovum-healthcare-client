@@ -51,6 +51,9 @@ const Doctors = async ({ searchParams }: PropType) => {
                         )}
                     </Box>
                 ))}
+                {data?.length === 0 && (
+                    <Box>No Doctor Found With This Specialty</Box>
+                )}
             </Box>
         </Container>
     );

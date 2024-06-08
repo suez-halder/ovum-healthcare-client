@@ -52,7 +52,7 @@ const PatientAppointmentsPage = () => {
             align: "center",
             renderCell: ({ row }) => {
                 return row.paymentStatus === "PAID" ? (
-                    <OvumChips label={row.paymentStatus} type="primary" />
+                    <OvumChips label={row.paymentStatus} type="success" />
                 ) : (
                     <OvumChips label={row.paymentStatus} type="error" />
                 );

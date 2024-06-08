@@ -1,6 +1,8 @@
 import { Chip } from "@mui/material";
 
-const OvumChips = ({ label, type }: { label: string; type: string }) => {
+type ChipType = "error" | "success" | "warning" | "info";
+
+const OvumChips = ({ label, type }: { label: string; type: ChipType }) => {
     let chipStyles = {
         bgcolor: "#cdffe0",
         color: "#00592e",

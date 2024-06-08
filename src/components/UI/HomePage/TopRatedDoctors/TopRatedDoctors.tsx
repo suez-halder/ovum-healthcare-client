@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Link from "next/link";
+import { useGetAllDoctorsQuery } from "@/redux/api/doctorApi";
 
 const TopRatedDoctors = async () => {
     const res = await fetch(
@@ -107,6 +108,7 @@ const TopRatedDoctors = async () => {
                                     }}
                                 >
                                     <Button>Book Now</Button>
+
                                     <Button variant="outlined">
                                         View Profile
                                     </Button>

@@ -1,5 +1,6 @@
 "use client";
 import { getTimeIn12HourFormat } from "@/app/(withDashboardLayout)/dashboard/doctor/schedules/components/MultipleSelectFieldChip";
+import { useCreateAppointmentMutation } from "@/redux/api/appointmentApi";
 import { useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorSchedulesApi";
 import { DoctorSchedule } from "@/types/doctorSchedule/doctorSchedule";
 
@@ -47,45 +48,24 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
     // console.log(currentDate);
     const today = currentDate.toLocaleDateString("en-US", { weekday: "long" });
 
-    const nextDate = new Date(currentDate);
-    nextDate.setDate(currentDate.getDate() + 1);
-    // console.log(nextDate);
-    const tomorrow = nextDate.toLocaleDateString("en-US", { weekday: "long" });
-
-    // query params for next date
-    query["startDateTime"] = dayjs(nextDate)
-        .utc()
-        .hour(0)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
-        .toISOString();
-
-    query["endDateTime"] = dayjs(nextDate)
-        .utc()
-        .hour(23)
-        .minute(59)
-        .second(59)
-        .millisecond(999)
-        .toISOString();
-
-    const { data: nextDoctorSchedules, isLoading: loading } =
-        useGetAllDoctorSchedulesQuery({
-            ...query,
-        });
-    const schedulesOfTomorrow = nextDoctorSchedules?.doctorSchedules;
-
-    console.log(schedulesOfTomorrow);
-
     const availableSlots = doctorSchedules?.filter(
         (doctor: DoctorSchedule) => !doctor.isBooked
     );
 
-    const availableNextDaySlots = schedulesOfTomorrow?.filter(
-        (doctor: DoctorSchedule) => !doctor.isBooked
-    );
+    const [createAppointment] = useCreateAppointmentMutation();
 
-    const handleBookAppointment = async () => {};
+    const handleBookAppointment = async () => {
+        try {
+            if (id && scheduleId) {
+                const res = await createAppointment({
+                    doctorId: id,
+                    scheduleId,
+                }).unwrap();
+            }
+        } catch (err: any) {
+            console.error(err.message);
+        }
+    };
 
     return (
         <Box mb={5}>
@@ -113,61 +93,6 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
                             "Loading..."
                         ) : (
                             availableSlots?.map(
-                                (doctorSchedule: DoctorSchedule) => {
-                                    const formattedTimeSlot = `${getTimeIn12HourFormat(
-                                        doctorSchedule?.schedule?.startDateTime
-                                    )} - ${getTimeIn12HourFormat(
-                                        doctorSchedule?.schedule?.endDateTime
-                                    )}`;
-
-                                    return (
-                                        <Button
-                                            key={doctorSchedule?.scheduleId}
-                                            color="primary"
-                                            onClick={() =>
-                                                setScheduleId(
-                                                    doctorSchedule?.scheduleId
-                                                )
-                                            }
-                                            variant={`${
-                                                doctorSchedule?.scheduleId ===
-                                                scheduleId
-                                                    ? "contained"
-                                                    : "outlined"
-                                            }`}
-                                        >
-                                            {formattedTimeSlot}
-                                        </Button>
-                                    );
-                                }
-                            )
-                        )
-                    ) : (
-                        <span style={{ color: "red" }}>
-                            No Schedule is Available Today!
-                        </span>
-                    )}
-                </Stack>
-                <Typography variant="h6" fontSize={16} mt={5}>
-                    <b>
-                        Tomorrow:{" "}
-                        {dateFormatter(nextDate.toISOString()) + " " + tomorrow}
-                    </b>
-                </Typography>
-                <Box
-                    sx={{ borderBottom: "2px dashed #d0d0d0", mt: 2, mb: 3 }}
-                />
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    flexWrap="wrap"
-                    gap={2}
-                >
-                    {availableNextDaySlots?.length ? (
-                        isLoading ? (
-                            "Loading..."
-                        ) : (
-                            availableNextDaySlots?.map(
                                 (doctorSchedule: DoctorSchedule) => {
                                     const formattedTimeSlot = `${getTimeIn12HourFormat(
                                         doctorSchedule?.schedule?.startDateTime

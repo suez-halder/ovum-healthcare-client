@@ -10,10 +10,10 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
     // implemented lazy loading for button component --> to resolve hydration error.
-    // const AuthButton = dynamic(
-    //     () => import("@/components/UI/AuthButton/AuthButton"),
-    //     { ssr: false }
-    // );
+    const AuthButton = dynamic(
+        () => import("@/components/UI/AuthButton/AuthButton"),
+        { ssr: false }
+    );
 
     const userInfo = useUserInfo();
     const role = userInfo?.role;
@@ -55,14 +55,17 @@ const Navbar = () => {
                     <Typography>Medicine</Typography>
                     <Typography>Diagnostics</Typography>
                     {userInfo?.email ? (
-                        <Typography component={Link} href={`dashboard/${role}`}>
+                        <Typography
+                            component={Link}
+                            href={`/dashboard/${role}`}
+                        >
                             Dashboard
                         </Typography>
                     ) : null}
                 </Stack>
 
-                {/* <AuthButton /> */}
-                {userInfo?.email ? (
+                <AuthButton />
+                {/* {userInfo?.email ? (
                     <Button onClick={handleLogout} color="error">
                         Logout
                     </Button>
@@ -70,7 +73,7 @@ const Navbar = () => {
                     <Button component={Link} href="/login">
                         Login
                     </Button>
-                )}
+                )} */}
             </Stack>
         </Container>
     );

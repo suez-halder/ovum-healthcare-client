@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { dateFormatter } from "@/utils/dateFormatter";
 import dayjs from "dayjs";
-import { ISchedule } from "@/types/schedule";
+import { TSchedule } from "@/types/schedule";
 
 const SchedulesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ const SchedulesPage = () => {
 
     useEffect(() => {
         const updateData = schedules?.map(
-            (schedule: ISchedule, index: number) => {
+            (schedule: TSchedule, index: number) => {
                 return {
                     sl: index + 1,
                     id: schedule?.id,

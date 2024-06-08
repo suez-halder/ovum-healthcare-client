@@ -6,10 +6,11 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import Link from "next/link";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { getTimeIn12HourFormat } from "../../doctor/schedules/components/MultipleSelectFieldChip";
+import OvumChips from "@/components/Shared/OvumChips/OvumChips";
 
 const PatientAppointmentsPage = () => {
     const { data, isLoading } = useGetMyAppointmentsQuery({});
-    console.log(data);
+    // console.log(data);
     const appointments = data?.appointments;
     const meta = data?.meta;
 
@@ -49,13 +50,13 @@ const PatientAppointmentsPage = () => {
             flex: 1,
             headerAlign: "center",
             align: "center",
-            //  renderCell: ({ row }) => {
-            //     return row.paymentStatus === 'PAID' ? (
-            //        <PhChips label={row.paymentStatus} type='success' />
-            //     ) : (
-            //        <PhChips label={row.paymentStatus} type='error' />
-            //     );
-            //  },
+            renderCell: ({ row }) => {
+                return row.paymentStatus === "PAID" ? (
+                    <OvumChips label={row.paymentStatus} type="primary" />
+                ) : (
+                    <OvumChips label={row.paymentStatus} type="error" />
+                );
+            },
         },
         {
             field: "action",

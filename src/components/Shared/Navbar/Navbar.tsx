@@ -1,20 +1,33 @@
 "use client";
 
 import useUserInfo from "@/hooks/useUserInfo";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import logoutUser from "@/services/actions/logoutUser";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
     // implemented lazy loading for button component --> to resolve hydration error.
-    const AuthButton = dynamic(
-        () => import("@/components/UI/AuthButton/AuthButton"),
-        { ssr: false }
-    );
+    // const AuthButton = dynamic(
+    //     () => import("@/components/UI/AuthButton/AuthButton"),
+    //     { ssr: false }
+    // );
 
     const userInfo = useUserInfo();
     const role = userInfo?.role;
+
+    const router = useRouter();
+
+    const handleLogout = () => {
+        // removeUser();
+        // localStorage.removeItem(authKey);
+        // deleteCookies([authKey, "refreshToken"]);
+        // router.push("/");
+        // router.refresh();
+        logoutUser(router);
+    };
 
     return (
         <Container>
@@ -41,7 +54,6 @@ const Navbar = () => {
                     <Typography>Health Plans</Typography>
                     <Typography>Medicine</Typography>
                     <Typography>Diagnostics</Typography>
-                    <Typography>NGOs</Typography>
                     {userInfo?.email ? (
                         <Typography component={Link} href={`dashboard/${role}`}>
                             Dashboard
@@ -49,7 +61,16 @@ const Navbar = () => {
                     ) : null}
                 </Stack>
 
-                <AuthButton />
+                {/* <AuthButton /> */}
+                {userInfo?.email ? (
+                    <Button onClick={handleLogout} color="error">
+                        Logout
+                    </Button>
+                ) : (
+                    <Button component={Link} href="/login">
+                        Login
+                    </Button>
+                )}
             </Stack>
         </Container>
     );

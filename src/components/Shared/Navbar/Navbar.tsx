@@ -1,7 +1,6 @@
 "use client";
 
 import useUserInfo from "@/hooks/useUserInfo";
-import { getUserInfo } from "@/services/auth.services";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
 import Link from "next/link";

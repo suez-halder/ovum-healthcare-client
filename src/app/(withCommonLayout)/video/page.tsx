@@ -1,3 +1,4 @@
+import VideoCall from "@/components/UI/VideoCall/VideoCall";
 import React from "react";
 
 const VideoCallingPage = ({
@@ -8,7 +9,8 @@ const VideoCallingPage = ({
     };
 }) => {
     const videoCallingId = searchParams?.videoCallingId;
-    return <div>VideoCallingPage</div>;
+
+    return <VideoCall videoCallingId={videoCallingId} />;
 };
 
 export default VideoCallingPage;

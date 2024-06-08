@@ -11,6 +11,17 @@ instance.defaults.headers.post["Content-Type"] = "application/json";
 instance.defaults.headers["Accept"] = "application/json";
 instance.defaults.timeout = 60000;
 
+// let isRefreshing = false;
+// let refreshSubscribers: any = [];
+
+// const onRefreshed = (accessToken: string) => {
+//     refreshSubscribers.map((callback: any) => callback(accessToken));
+// };
+
+// const addRefreshSubscriber = (callback: any) => {
+//     refreshSubscribers.push(callback);
+// };
+
 // Add a request interceptor
 instance.interceptors.request.use(
     function (config) {
@@ -52,14 +63,12 @@ instance.interceptors.response.use(
         // console.log(config);
 
         if (error?.response?.status === 500 && !config.sent) {
-            config.sent = true; //! to stop request again and again
+            config.sent = true; // to stop request again and again
             const response = await getNewAccessToken();
             const accessToken = response?.data?.accessToken;
             config.headers["Authorization"] = accessToken;
             setToLocalStorage(authKey, accessToken);
-
             setAccessToken(accessToken);
-
             return instance(config);
         } else {
             const responseObj: TGenericErrorResponse = {
@@ -73,6 +82,47 @@ instance.interceptors.response.use(
             return responseObj;
         }
     }
+
+    // async function (error) {
+    //     const config = error.config;
+
+    //     if (error?.response?.status === 500 && !config.sent) {
+    //         if (!isRefreshing) {
+    //             isRefreshing = true;
+    //             try {
+    //                 config.sent = true;
+    //                 const response = await getNewAccessToken();
+    //                 const accessToken = response?.data?.accessToken;
+    //                 setToLocalStorage(authKey, accessToken);
+    //                 config.headers["Authorization"] = accessToken;
+    //                 setAccessToken(accessToken);
+    //                 onRefreshed(accessToken);
+    //             } catch (e) {
+    //                 return Promise.reject(e);
+    //             } finally {
+    //                 isRefreshing = false;
+    //                 refreshSubscribers = [];
+    //             }
+    //         }
+
+    //         const retryOrigReq = new Promise((resolve) => {
+    //             addRefreshSubscriber((accessToken: string) => {
+    //                 config.headers["Authorization"] = accessToken;
+    //                 config.__isRetryRequest = true;
+    //                 resolve(axios(config));
+    //             });
+    //         });
+    //         return retryOrigReq;
+    //     }
+
+    //     const responseObj: TGenericErrorResponse = {
+    //         statusCode: error?.response?.data?.statusCode || 500,
+    //         message: error?.response?.data?.message || "Something went wrong!",
+    //         errorMessages: error?.response?.data?.message,
+    //     };
+
+    //     return Promise.reject(responseObj);
+    // }
 );
 
 export { instance };

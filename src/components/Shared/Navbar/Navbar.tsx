@@ -1,8 +1,11 @@
 "use client";
 
+import useUserInfo from "@/hooks/useUserInfo";
+import { getUserInfo } from "@/services/auth.services";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
     // implemented lazy loading for button component --> to resolve hydration error.
@@ -10,6 +13,9 @@ const Navbar = () => {
         () => import("@/components/UI/AuthButton/AuthButton"),
         { ssr: false }
     );
+
+    const userInfo = useUserInfo();
+    const role = userInfo?.role;
 
     return (
         <Container>
@@ -37,6 +43,11 @@ const Navbar = () => {
                     <Typography>Medicine</Typography>
                     <Typography>Diagnostics</Typography>
                     <Typography>NGOs</Typography>
+                    {userInfo?.email ? (
+                        <Typography component={Link} href={`dashboard/${role}`}>
+                            Dashboard
+                        </Typography>
+                    ) : null}
                 </Stack>
 
                 <AuthButton />

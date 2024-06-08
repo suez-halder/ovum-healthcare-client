@@ -2,6 +2,7 @@
 import { getTimeIn12HourFormat } from "@/app/(withDashboardLayout)/dashboard/doctor/schedules/components/MultipleSelectFieldChip";
 import { useCreateAppointmentMutation } from "@/redux/api/appointmentApi";
 import { useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorSchedulesApi";
+import { useInitialPaymentMutation } from "@/redux/api/paymentApi";
 import { DoctorSchedule } from "@/types/doctorSchedule/doctorSchedule";
 
 import { dateFormatter } from "@/utils/dateFormatter";
@@ -53,6 +54,7 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
     );
 
     const [createAppointment] = useCreateAppointmentMutation();
+    const [initialPayment] = useInitialPaymentMutation();
 
     const handleBookAppointment = async () => {
         try {
@@ -61,6 +63,14 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
                     doctorId: id,
                     scheduleId,
                 }).unwrap();
+                if (res?.id) {
+                    const response = await initialPayment(res?.id).unwrap();
+                    // console.log(response);
+                    if (response?.paymentUrl) {
+                        // console.log(response?.paymentUrl);
+                        router.push(response?.paymentUrl);
+                    }
+                }
             }
         } catch (err: any) {
             console.error(err.message);

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import OvumForm from "@/components/Forms/OvumForm";
 import OvumInput from "@/components/Forms/OvumInput";
 import { useChangePasswordMutation } from "@/redux/api/authApi";
+import logoutUser from "@/services/actions/logoutUser";
 
 const validationSchema = z.object({
     oldPassword: z.string().min(6, "Must be at least 6 characters long"),
@@ -18,11 +19,13 @@ const validationSchema = z.object({
 
 const ChangePassword = () => {
     const [changePassword] = useChangePasswordMutation();
+    const router = useRouter();
 
     const onSubmit = async (values: FieldValues) => {
         try {
             const res = await changePassword(values).unwrap();
             if (res.status === 200) {
+                logoutUser(router);
                 toast.success("Password changed successfully!");
             } else {
                 throw new Error("Incorrect Old Password!");

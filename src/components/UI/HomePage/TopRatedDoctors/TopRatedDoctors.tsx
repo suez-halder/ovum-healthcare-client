@@ -57,10 +57,10 @@ const TopRatedDoctors = async () => {
                             <Card>
                                 <Box>
                                     <Image
-                                        src={doctor.profilePhoto}
+                                        src={doctor?.profilePhoto}
                                         alt="doctor"
-                                        width={500}
                                         height={500}
+                                        width={500}
                                     />
                                 </Box>
                                 <CardContent>
